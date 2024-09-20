@@ -14,6 +14,7 @@ import java.util.Map;
 public class StationsDaoImpl implements StationsDao {
     @Override
     public int insert(Stations stations) {
+
         return 0;
     }
 
@@ -39,10 +40,10 @@ public class StationsDaoImpl implements StationsDao {
             params.add("%" + courierStationName + "%");
         }
 //      根据小区名字
-        String communityName = map.get("communityName");
-        if (communityName != null && !"".equals(communityName)) {
-            sql += " and communityName like ? ";
-            params.add("%" + communityName + "%");
+        String courierStationCommunityName = map.get("communityName");
+        if (courierStationCommunityName != null && !"".equals(courierStationCommunityName)) {
+            sql += " and courierStationCommunityName like ? ";
+            params.add("%" + courierStationCommunityName + "%");
         }
 //        根据时间
         String startTime = map.get("startTime");
@@ -105,10 +106,10 @@ public class StationsDaoImpl implements StationsDao {
             params.add("%" + courierStationName + "%");
         }
 //      根据小区名字
-        String communityName = map.get("communityName");
-        if (communityName != null && !"".equals(communityName)) {
-            sql += " and communityName like ? ";
-            params.add("%" + communityName + "%");
+        String courierStationCommunityName = map.get("communityName");
+        if (courierStationCommunityName != null && !"".equals(courierStationCommunityName)) {
+            sql += " and courierStationCommunityName like ? ";
+            params.add("%" + courierStationCommunityName + "%");
         }
 //        根据时间
         String startTime = map.get("startTime");

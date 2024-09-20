@@ -25,7 +25,20 @@ public class Community {
         public Community() {
         }
 
-        public Community(int communityId, String communityName, String communityProvince, String communityCity, String communityDistrict, String communityAddress, String communityLatitude, String communityLongitude, Date createTime, int communityShopCount, int communityAreaCode, String communityCoordinates, int communityStatus, int communityUserCount, String distance) {
+    public Community(int communityId, String communityName, String communityProvince, String communityCity, String communityDistrict, String communityAddress, String communityLatitude, String communityLongitude, int communityAreaCode, String communityCoordinates) {
+        this.communityId = communityId;
+        this.communityName = communityName;
+        this.communityProvince = communityProvince;
+        this.communityCity = communityCity;
+        this.communityDistrict = communityDistrict;
+        this.communityAddress = communityAddress;
+        this.communityLatitude = communityLatitude;
+        this.communityLongitude = communityLongitude;
+        this.communityAreaCode = communityAreaCode;
+        this.communityCoordinates = communityCoordinates;
+    }
+
+    public Community(int communityId, String communityName, String communityProvince, String communityCity, String communityDistrict, String communityAddress, String communityLatitude, String communityLongitude, Date createTime, int communityShopCount, int communityAreaCode, String communityCoordinates, int communityStatus, int communityUserCount, String distance) {
             this.communityId = communityId;
             this.communityName = communityName;
             this.communityProvince = communityProvince;

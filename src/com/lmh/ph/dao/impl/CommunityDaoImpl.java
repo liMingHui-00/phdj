@@ -1,15 +1,14 @@
 package com.lmh.ph.dao.impl;
 
+import com.alibaba.druid.util.JdbcUtils;
 import com.lmh.ph.dao.CommunityDao;
 import com.lmh.ph.entity.Community;
 import com.lmh.ph.util.JDBCDruidUtil;
 
+import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CommunityDaoImpl implements CommunityDao {
     @Override
@@ -21,33 +20,56 @@ public class CommunityDaoImpl implements CommunityDao {
 //        communityAddress
 //        communityLatitude communityLongitude
 //        communityShopCount communityStatus  communityUserCount startTime distance communityCoordinates communityAreaCode
-//        String sql = "insert into community values ? ? ? ? ? ? ? ? ? ? ? ? ?  ? ";
-//        Object obj[] = {}
-        return 0;
+        String sql = "insert into community values (null,?, ?, ?, ?, ?, ? ,? ,? ,?, ?, ?, ?, ?,  ?) ";
+        Object obj[] = {
+                community.getCommunityName(),
+                community.getCommunityProvince(),
+                community.getCommunityCity(),
+                community.getCommunityDistrict(),
+                community.getCommunityAddress(),
+                community.getCommunityLatitude(),
+                community.getCommunityLongitude(),
+                new Date(),
+                community.getCommunityShopCount(),
+                community.getCommunityAreaCode(),
+                community.getCommunityCoordinates(),
+                community.getCommunityStatus(),
+                community.getCommunityUserCount(),
+                community.getDistance()
+        };
+        return JDBCDruidUtil.update(sql, obj);
     }
 
     @Override
     public int update(Community community) {
-        return 0;
+        String sql = "update community set communityName= ?," +
+                                            "communityProvince=?," +
+                                            "communityCity=?," +
+                                            "communityDistrict=?," +
+                                            "communityAddress=?," +
+                                            "communityLatitude=?," +
+                                            "communityLongitude=? " +
+                                            "where communityId = ? ";
+        Object obj[] = {
+                community.getCommunityName(),
+                community.getCommunityProvince(),
+                community.getCommunityCity(),
+                community.getCommunityDistrict(),
+                community.getCommunityAddress(),
+                community.getCommunityLatitude(),
+                community.getCommunityLongitude(),
+                community.getCommunityId()
+        };
+        return JDBCDruidUtil.update(sql, obj);
     }
 
     @Override
     public int delete(int communityId) {
-        String sql = "delete from community where id = ?";
+        String sql = "delete from community where communityId = ?";
         Object obj[] = {communityId};
-        ResultSet query = JDBCDruidUtil.query(sql, obj);
-        int i = 0;
-        while (true){
-            try {
-                if (!query.next()) break;
-                 i = query.getInt(1);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-        }
-        return i;
+        return JDBCDruidUtil.update(sql, obj);
     }
+
     @Override
     public List<Community> selectAll(Map<String, String> map) {
         ArrayList<Community> list = new ArrayList<>();
@@ -56,31 +78,33 @@ public class CommunityDaoImpl implements CommunityDao {
 //        动态sql
 //        根据名字
         String communityName = map.get("communityName");
-        if (communityName!=null&&!"".equals(communityName)){
-            sql+=" and communityName like ? ";
-            params.add("%"+communityName+"%");
+        if (communityName != null && !"".equals(communityName)) {
+            sql += " and communityName like ? ";
+            params.add("%" + communityName + "%");
         }
 //        根据时间
         String startTime = map.get("startTime");
-        if (startTime!=null&& !"".equals(startTime)){
+        if (startTime != null && !"".equals(startTime)) {
             String endTime = map.get("endTime");
-            sql+=" and startTime between ? and ? ";
+            sql += " and startTime between ? and ? ";
             params.add(startTime);
             params.add(map.get("endTime"));
         }
+
+        sql +=" order by communityId desc ";
 //       根据分页
         String pn = map.get("pageNum");
-        if (pn!=null&&!"".equals(pn)){
-            sql+=" limit ?,?";
-           int pageNum = Integer.parseInt(pn);
-           int pageSize = Integer.parseInt(map.get("pageSize"));
-           params.add((pageNum-1)*pageSize);
-           params.add(pageSize);
+        if (pn != null && !"".equals(pn)) {
+            sql += " limit ?,?";
+            int pageNum = Integer.parseInt(pn);
+            int pageSize = Integer.parseInt(map.get("pageSize"));
+            params.add((pageNum - 1) * pageSize);
+            params.add(pageSize);
         }
 //        查询
         Object obj[] = params.toArray();
         ResultSet resultSet = JDBCDruidUtil.query(sql, obj);
-        while (true){
+        while (true) {
             try {
                 if (!resultSet.next()) break;
                 Community community = new Community(
@@ -118,21 +142,21 @@ public class CommunityDaoImpl implements CommunityDao {
 //        动态sql
 //        根据名字
         String communityName = map.get("communityName");
-        if (communityName!=null&&!"".equals(communityName)){
-            sql+=" and communityName like ? ";
-            params.add("%"+communityName+"%");
+        if (communityName != null && !"".equals(communityName)) {
+            sql += " and communityName like ? ";
+            params.add("%" + communityName + "%");
         }
 //        根据时间
         String startTime = map.get("startTime");
-        if (startTime!=null&& !"".equals(startTime)){
-            sql+=" and startTime between ? and ? ";
+        if (startTime != null && !"".equals(startTime)) {
+            sql += " and startTime between ? and ? ";
             params.add(startTime);
             params.add(map.get("endTime"));
         }
 //        查询
         Object obj[] = params.toArray();
         ResultSet resultSet = JDBCDruidUtil.query(sql, obj);
-        while (true){
+        while (true) {
             try {
                 if (!resultSet.next()) break;
                 count = resultSet.getInt(1);
