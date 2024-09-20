@@ -7,17 +7,22 @@ import com.lmh.ph.util.JDBCDruidUtil;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class CommunityDaoImpl implements CommunityDao {
     @Override
     public int insert(Community community) {
-        return 0;
-    }
-
-    @Override
-    public int delete(int communityId) {
+//        communityName
+//        communityProvince
+//        communityCity
+//        communityDistrict
+//        communityAddress
+//        communityLatitude communityLongitude
+//        communityShopCount communityStatus  communityUserCount startTime distance communityCoordinates communityAreaCode
+//        String sql = "insert into community values ? ? ? ? ? ? ? ? ? ? ? ? ?  ? ";
+//        Object obj[] = {}
         return 0;
     }
 
@@ -26,6 +31,23 @@ public class CommunityDaoImpl implements CommunityDao {
         return 0;
     }
 
+    @Override
+    public int delete(int communityId) {
+        String sql = "delete from community where id = ?";
+        Object obj[] = {communityId};
+        ResultSet query = JDBCDruidUtil.query(sql, obj);
+        int i = 0;
+        while (true){
+            try {
+                if (!query.next()) break;
+                 i = query.getInt(1);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        return i;
+    }
     @Override
     public List<Community> selectAll(Map<String, String> map) {
         ArrayList<Community> list = new ArrayList<>();

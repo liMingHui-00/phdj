@@ -1,13 +1,13 @@
 package com.lmh.ph.servlet;
 
 import com.alibaba.fastjson.JSON;
-import com.lmh.ph.dao.CommunityDao;
 import com.lmh.ph.dao.impl.CommunityDaoImpl;
+import com.lmh.ph.dao.impl.StationsDaoImpl;
 import com.lmh.ph.entity.Community;
+import com.lmh.ph.entity.Stations;
 import com.lmh.ph.util.Result;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,57 +17,44 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//小区管理
-@WebServlet("/community")
-public class CommunityServlet extends HttpServlet {
+@WebServlet("/courierStation")
+public class StationsServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        读取action判断是哪个操作
+        //        读取action判断是哪个操作
         String action = req.getParameter("action");
-        if ("selectAll".equals(action)) {
+        if ("querySearchCourierStationList".equals(action)) {
 //            接受数据
+            String courierStationName = req.getParameter("courierStationName");
             String communityName = req.getParameter("communityName");
             String startTime = req.getParameter("startTime");
             String endTime = req.getParameter("endTime");
             String pageNum = req.getParameter("pageNum");
             String pageSize = req.getParameter("pageSize");
 //          封装到集合中
-            CommunityDaoImpl communityDao = new CommunityDaoImpl();
+            StationsDaoImpl stationsDao = new StationsDaoImpl();
             Map<String, String> map = new HashMap<>();
             map.put("communityName",communityName);
+            map.put("courierStationName",courierStationName);
             map.put("startTime",startTime);
             map.put("endTime",endTime);
             map.put("pageNum",pageNum);
             map.put("pageSize",pageSize);
 //            连接数据库
-            List<Community> communityList = communityDao.selectAll(map);
+            List<Stations> stationsList = stationsDao.selectAll(map);
 //           查询所有的条数
-            int total = communityDao.selectCount(map);
+            int total = stationsDao.selectCount(map);
 //            给出响应
             Map resultMap = new HashMap<>();
-           resultMap.put("list",communityList);
-           resultMap.put("total",total);
+            resultMap.put("list",stationsList);
+            resultMap.put("total",total);
             Result result = Result.success(resultMap);
             resp.getWriter().write(JSON.toJSONString(result));
-        }
-//        删除
-        if ("communityRemove".equals(action)){
-            String communityId = req.getParameter("communityId");
-//            System.out.println(communityId);
-//            调用数据库删除数据
-            CommunityDaoImpl communityDao = new CommunityDaoImpl();
-           communityDao.delete(Integer.parseInt(communityId));
-            Result result = Result.success("删除成功");
-            resp.getWriter().write(JSON.toJSONString(result));
-        }
-//        增加 修改
-        if ("communityUpdate".equals(action)){
-
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        doPost(req, resp);
+        doPost(req,resp);
     }
 }
